@@ -1,0 +1,172 @@
+/* Floating Button */
+.ai-floating-btn {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  width: 55px;
+  height: 55px;
+  background: rgba(0, 0, 0, 0.65);
+  color: white;
+  font-size: 26px;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  z-index: 3000;
+  backdrop-filter: blur(8px);
+  transition: 0.2s;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+}
+
+.ai-floating-btn:hover {
+  transform: scale(1.12);
+}
+
+/* Popup Box */
+/* .ai-popup {
+  position: fixed;
+  bottom: 85px;
+  right: 20px;
+  width: 280px;
+  padding: 15px;
+  border-radius: 18px;
+  z-index: 2999;
+  animation: fadeIn 0.25s ease-out;
+} */
+
+/* Suggestion item */
+.ai-suggestion-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px;
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.4);
+  margin-bottom: 10px;
+  backdrop-filter: blur(10px);
+}
+
+.ai-suggestion-item img {
+  width: 50px;
+  height: 50px;
+  border-radius: 8px;
+  object-fit: cover;
+}
+
+/* Fade animation */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+  }
+}
+/* .ai-item {
+  display: flex;
+  gap: 10px;
+  padding: 10px;
+  background: rgba(255,255,255,0.5);
+  border-radius: 10px;
+  margin-bottom: 10px;
+  align-items: center;
+} */
+
+/* .ai-item img {
+  width: 50px;
+  height: 50px;
+  object-fit: cover;
+  border-radius: 8px;
+} */
+
+.ai-item .name {
+  font-weight: 600;
+  font-size: 0.9rem;
+}
+
+.ai-item .price {
+  font-size: 0.8rem;
+  color: #3c7be8;
+}
+/* .ai-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px;
+  margin-bottom: 12px;
+  border-radius: 15px;
+  cursor: pointer;
+  background: rgba(255, 255, 255, 0.4);
+  transition: 0.25s ease;
+}
+
+.ai-item:hover {
+  background: rgba(255, 255, 255, 0.7);
+  transform: scale(1.02);
+} */
+
+.ai-item img {
+  width: 55px;
+  height: 55px;
+  border-radius: 12px;
+  object-fit: cover;
+}
+
+/* .ai-item .reason {
+  font-size: 13px;
+  color: #222 !important;
+  opacity: 0.9;
+  margin-top: 2px;
+} */
+
+
+/* AI Popup Box */
+.ai-popup {
+  position: fixed;
+  bottom: 95px;
+  right: 25px;
+  width: 320px;
+  max-height: 60vh; /* LIMIT HEIGHT */
+  overflow-y: auto; /* INTERNAL SCROLL */
+  padding: 15px;
+  border-radius: 20px;
+  z-index: 2000;
+  animation: fadeIn 0.3s ease-out;
+  backdrop-filter: blur(12px);
+}
+
+/* Hide ugly scroll bar (optional) */
+.ai-popup::-webkit-scrollbar {
+  width: 6px;
+}
+.ai-popup::-webkit-scrollbar-thumb {
+  background: rgba(100, 100, 100, 0.3);
+  border-radius: 10px;
+}
+
+/* Each Suggested Item */
+.ai-item {
+  display: flex;
+  gap: 12px;
+  padding: 10px;
+  background: rgba(255, 255, 255, 0.3);
+  border-radius: 14px;
+  margin-bottom: 12px;
+  cursor: pointer;
+}
+
+.ai-item:hover {
+  background: rgba(255, 255, 255, 0.5);
+}
+
+/* Reason text */
+.ai-item .reason {
+  font-size: 13px;
+  color: #222;
+  opacity: 0.9;
+  margin-top: 4px;
+}
+
+

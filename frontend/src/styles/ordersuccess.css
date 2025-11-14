@@ -1,0 +1,33 @@
+/* Make text readable on glass background */
+.order-success-content {
+  color: #1a1a1a !important; /* Dark text */
+}
+
+.order-success-content h2,
+.order-success-content h5 {
+  color: #222 !important;
+  font-weight: 700;
+}
+
+.order-success-summary {
+  color: #000 !important;
+}
+
+/* Links like phone number or total */
+.order-success-summary a,
+.order-success-summary span {
+  color: #0056d6 !important;
+  font-weight: 600;
+}
+
+/* Button fixes */
+.order-success-content .btn-glass {
+  color: #fff !important;
+  font-weight: 600;
+  background: rgba(0, 0, 0, 0.4) !important;
+}
+
+.order-success-content .btn-glass:hover {
+  background: rgba(0, 0, 0, 0.6) !important;
+  color: #fff !important;
+}
