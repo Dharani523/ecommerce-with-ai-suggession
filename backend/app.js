@@ -7,7 +7,9 @@ const connectDB = require('./config/connectdb'); // ✅ fixed typo (was connnect
 const productRoutes = require('./routes/product');
 const orderRoutes = require('./routes/order');
 
-dotenv.config({ path: './config/config.env' });
+// dotenv.config({ path: './config/config.env' });
+dotenv.config();
+
 
 const app = express();
 
