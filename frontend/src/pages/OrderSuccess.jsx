@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 import confetti from "canvas-confetti";
 import { useNavigate, useLocation } from "react-router-dom";
-import  "../styles/OrderSuccess.css";
+import  "../styles/orderSuccess.css";
 
 function OrderSuccess() {
   const navigate = useNavigate();
