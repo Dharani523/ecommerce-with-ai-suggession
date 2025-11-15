@@ -1,7 +1,7 @@
-import React, { useState, useContext } from "react";
+import React, { useState, useContext, useRef } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import axios from "../axiosInstance";
-import { CartContext } from "../context/CartContext"; // ⭐ ADD THIS
+import { CartContext } from "../context/CartContext";
 
 function Checkout() {
   const location = useLocation();
@@ -9,14 +9,18 @@ function Checkout() {
   const cart = location.state?.cart || [];
   const [loading, setLoading] = useState(false);
 
-  const { clearCart } = useContext(CartContext); // ⭐ ADD THIS
+  const { clearCart } = useContext(CartContext);
 
-  // Shipping fields
+  // ⭐ Input References
+  const nameRef = useRef(null);
+  const phoneRef = useRef(null);
+  const addressRef = useRef(null);
+
+  // Input States
   const [name, setName] = useState("");
   const [phone, setPhone] = useState("");
   const [address, setAddress] = useState("");
 
-  // Error messages
   const [errors, setErrors] = useState({
     name: "",
     phone: "",
@@ -37,30 +41,56 @@ function Checkout() {
 
   const validateField = (field, value) => {
     let message = "";
+
     if (field === "name") {
       if (!value.trim()) message = "Name is required.";
       else if (value.length < 2) message = "Name must be at least 2 characters.";
-    } else if (field === "phone") {
+    }
+
+    if (field === "phone") {
       if (!value.trim()) message = "Phone number is required.";
       else if (!/^\d{10}$/.test(value))
         message = "Phone must be a valid 10-digit number.";
-    } else if (field === "address") {
+    }
+
+    if (field === "address") {
       if (!value.trim()) message = "Address is required.";
       else if (value.length < 5)
         message = "Address must be at least 5 characters.";
     }
+
     setErrors((prev) => ({ ...prev, [field]: message }));
     return message === "";
   };
 
+  // ⭐ Scroll to first invalid field
   const validateAll = () => {
     const validName = validateField("name", name);
     const validPhone = validateField("phone", phone);
     const validAddress = validateField("address", address);
-    return validName && validPhone && validAddress;
+
+    if (!validName) {
+      setTimeout(() => nameRef.current?.scrollIntoView({ behavior: "smooth", block: "center" }), 100);
+      nameRef.current?.focus();
+      return false;
+    }
+
+    if (!validPhone) {
+      setTimeout(() => phoneRef.current?.scrollIntoView({ behavior: "smooth", block: "center" }), 100);
+      phoneRef.current?.focus();
+      return false;
+    }
+
+    if (!validAddress) {
+      setTimeout(() => addressRef.current?.scrollIntoView({ behavior: "smooth", block: "center" }), 100);
+      addressRef.current?.focus();
+      return false;
+    }
+
+    return true;
   };
 
-  // ⭐⭐⭐ IMPORTANT: Clear cart after order success
+  // ⭐ Place Order
   const placeOrder = async () => {
     if (!validateAll()) return;
 
@@ -75,17 +105,15 @@ function Checkout() {
       const res = await axios.post("/orders", orderData);
 
       if (res.data.success) {
-
-        clearCart();                 // ⭐ Clear cart (state)
-        localStorage.removeItem("cart");  // ⭐ Clear localStorage
+        clearCart();
+        localStorage.removeItem("cart");
 
         navigate("/order-success", { state: { orderData: res.data.order } });
       } else {
-        alert("Failed to place order. " + (res.data.error || ""));
+        alert("Order failed.");
       }
     } catch (err) {
-      console.error("Error:", err.response || err);
-      alert("Something went wrong. Check backend.");
+      alert("Something went wrong!");
     } finally {
       setLoading(false);
     }
@@ -95,15 +123,19 @@ function Checkout() {
     <div className="container my-5">
       <h2 className="mb-4 text-center text-light hhh">Checkout</h2>
 
-      <div className="row g-4 checkout-row">
-        {/* Left */}
-        <div className="col-lg-6 d-flex">
-          <div className="card p-4 shadow-sm glass-card w-100 h-100">
+      {/* ⭐ Responsive Layout */}
+      <div className="row g-4">
+
+        {/* LEFT — Form */}
+        <div className="col-12 col-md-6 d-flex">
+          <div className="card p-4 shadow-sm glass-card w-100">
             <h5 className="mb-3">Shipping Details</h5>
 
+            {/* Name */}
             <div className="mb-3">
               <label className="form-label">Full Name</label>
               <input
+                ref={nameRef}
                 type="text"
                 className={`form-control ${errors.name ? "is-invalid" : ""}`}
                 placeholder="Your Name"
@@ -114,9 +146,11 @@ function Checkout() {
               {errors.name && <div className="invalid-feedback">{errors.name}</div>}
             </div>
 
+            {/* Phone */}
             <div className="mb-3">
               <label className="form-label">Phone</label>
               <input
+                ref={phoneRef}
                 type="tel"
                 className={`form-control ${errors.phone ? "is-invalid" : ""}`}
                 placeholder="10-digit Phone Number"
@@ -127,9 +161,11 @@ function Checkout() {
               {errors.phone && <div className="invalid-feedback">{errors.phone}</div>}
             </div>
 
+            {/* Address */}
             <div className="mb-3">
               <label className="form-label">Address</label>
               <textarea
+                ref={addressRef}
                 className={`form-control ${errors.address ? "is-invalid" : ""}`}
                 placeholder="Shipping Address"
                 rows="4"
@@ -142,33 +178,30 @@ function Checkout() {
           </div>
         </div>
 
-        {/* Right */}
-        <div className="col-lg-6 d-flex">
-          <div className="card p-4 shadow-sm glass-card w-100 h-100">
+        {/* RIGHT — Order Summary */}
+        <div className="col-12 col-md-6 d-flex">
+          <div className="card p-4 shadow-sm glass-card w-100">
             <h5 className="mb-3">Order Summary</h5>
 
-            <div className="overflow-auto" style={{ maxHeight: "400px" }}>
+            <div style={{ maxHeight: "400px", overflowY: "auto" }}>
               {cart.map((item) => (
                 <div
                   key={item.product._id}
                   className="d-flex align-items-center mb-3 border-bottom pb-2"
                 >
                   <img
-                    src={item.product.images?.[0]?.image || "/images/placeholder.png"}
+                    src={item.product.images?.[0]?.image}
                     alt={item.product.name}
-                    style={{
-                      width: "60px",
-                      height: "60px",
-                      objectFit: "contain",
-                      marginRight: "15px",
-                    }}
+                    style={{ width: "60px", height: "60px", objectFit: "contain", marginRight: "15px" }}
                   />
+
                   <div className="flex-grow-1">
                     <h6 className="mb-1">{item.product.name}</h6>
                     <small className="text-muted">
                       ${item.product.price.toFixed(2)} x {item.qty}
                     </small>
                   </div>
+
                   <div className="fw-bold">
                     ${(item.product.price * item.qty).toFixed(2)}
                   </div>
@@ -190,6 +223,7 @@ function Checkout() {
             </button>
           </div>
         </div>
+
       </div>
     </div>
   );

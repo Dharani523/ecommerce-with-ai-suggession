@@ -131,20 +131,34 @@ body {
   }
 }
 .checkout-row {
-  display: flex;
-  align-items: stretch;
+  
+  overflow-y: visible !important;
+  /* align-items: stretch; */
 }
-.checkout-row .glass-card {
-  height: 100%;
-}
-.checkout-left {
+
+/* .checkout-left {
   max-height: 480px;
   overflow-y: auto;
+} */
+ .checkout-row {
+  margin-top: 20px;
 }
+
+@media (max-width: 768px) {
+  .checkout-row {
+    display: block;
+  }
+}
+
+.checkout-left,
 .checkout-right {
+  max-height: unset !important;
+  overflow: visible !important;
+}
+/* .checkout-right {
   max-height: 480px;
   overflow-y: auto;
-}
+} */
 /* Product Card Compact Layout */
 .product-card {
   border-radius: 16px;
@@ -226,4 +240,9 @@ footer {
 /* Remove body bottom spacing (Bootstrap sometimes adds it) */
 body {
   padding-bottom: 0 !important;
+  padding-top: 90px !important;
+}
+html, body {
+  overflow-y: auto !important;
+  height: auto !important;
 }
