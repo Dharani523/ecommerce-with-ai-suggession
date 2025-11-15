@@ -7,18 +7,17 @@ function ProductCard({ product }) {
   const { addToCart } = useContext(CartContext);
 
   return (
-    <div className="card glass-card p-3 h-100">
-
+    <div 
+      className="card shadow-sm border-0 rounded-4 h-100 product-card"
+      style={{ cursor: "pointer" }}
+    >
       {/* Image Section */}
       <div
+        className="d-flex justify-content-center align-items-center"
         style={{
-          height: "250px",
-          backgroundColor: "#f8f9fa",
-          display: "flex",
-          justifyContent: "center",
-          alignItems: "center",
+          height: "220px",
+          backgroundColor: "#f1f3f5",
           overflow: "hidden",
-          cursor: "pointer",
         }}
         onClick={() => navigate(`/product/${product._id}`)}
       >
@@ -26,38 +25,42 @@ function ProductCard({ product }) {
           src={product.image || product.images?.[0]?.image}
           alt={product.name}
           style={{
-            maxHeight: "100%",
-            maxWidth: "100%",
+            maxHeight: "90%",
+            maxWidth: "90%",
             objectFit: "contain",
+            transition: "0.3s",
           }}
+          className="product-img"
         />
       </div>
 
       {/* Product Info */}
-      <div className="card-body d-flex flex-column justify-content-between">
-        <h5 className="card-title text-center fw-bold text-dark">
-          {product.name}
-        </h5>
-        <p className="text-center text-muted small">
-          {product.description?.substring(0, 60)}...
+      <div className="card-body text-center">
+        <h6 className="fw-bold">{product.name}</h6>
+        <p className="text-muted small mb-2">
+          {product.description?.substring(0, 50)}...
         </p>
-        <h6 className="text-center fw-bold text-success mb-3">
-          ${product.price}
-        </h6>
+        <h5 className="text-success fw-bold">${product.price}</h5>
 
-        {/* Buttons */}
-        <div className="d-flex justify-content-around mt-auto">
+        <div className="mt-3 d-flex gap-2 justify-content-center">
           <button
-            className="btn btn-outline-primary btn-sm px-3"
-            onClick={() => navigate(`/product/${product._id}`)}
+            className="btn btn-outline-primary btn-sm"
+            onClick={(e) => {
+              e.stopPropagation();
+              navigate(`/product/${product._id}`);
+            }}
           >
-            View Details
+            View
           </button>
+
           <button
-            className="btn btn-dark btn-sm px-3"
-            onClick={() => addToCart(product)}
+            className="btn btn-dark btn-sm"
+            onClick={(e) => {
+              e.stopPropagation();
+              addToCart(product);
+            }}
           >
-            Add to Cart 🛒
+            Add 🛒
           </button>
         </div>
       </div>

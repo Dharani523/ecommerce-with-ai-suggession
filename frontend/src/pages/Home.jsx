@@ -12,10 +12,10 @@ function Home() {
   const categoryQuery = queryParams.get("category") || "";
 
   const [products, setProducts] = useState([]);
-  const [loading, setLoading] = useState(true); // ⬅️ NEW
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    setLoading(true); // ⬅️ NEW (loading starts)
+    setLoading(true);
     axios
       .get("/products", {
         params: { search: searchQuery, category: categoryQuery },
@@ -24,17 +24,17 @@ function Home() {
         setProducts(res.data.products);
       })
       .catch((err) => console.log(err))
-      .finally(() => setLoading(false)); // ⬅️ NEW (loading ends)
+      .finally(() => setLoading(false));
   }, [searchQuery, categoryQuery]);
 
   const slides = [
     {
-      image: "/images/img3.png",
+      image: "/images/img5.png",
       title: "Discover New Gadgets",
       description: "Shop the latest and greatest tech trends.",
     },
     {
-      image: "/images/img2.png",
+      image: "/images/img6.png",
       title: "Stylish Laptops",
       description: "Work smarter with our premium laptop collection.",
     },
@@ -51,21 +51,23 @@ function Home() {
 
       <Carousel slides={slides} />
 
-      <div className="container mt-5">
-        <div className="row g-4">
+      {/* 🔥 Wider container to remove side spaces */}
+      <div className="product-list mt-5">
 
-          {/* ✅ Loading UI */}
+        <div className="row gy-4 gx-3">
+
           {loading ? (
             <p className="text-center fs-5">Loading products...</p>
           ) : products.length === 0 ? (
             <p className="text-center fs-5">No products found.</p>
           ) : (
             products.map((p) => (
-              <div key={p._id} className="col-lg-4 col-md-6 col-sm-12">
+              <div key={p._id} className="col-lg-3 col-md-4 col-sm-6 col-12">
                 <ProductCard product={p} />
               </div>
             ))
           )}
+
         </div>
       </div>
     </>

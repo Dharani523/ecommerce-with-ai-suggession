@@ -14,7 +14,16 @@ function Navbar() {
   const [categoryQuery, setCategoryQuery] = useState(categoryQueryFromUrl);
   const [categories, setCategories] = useState([]);
 
-  // Fetch categories once
+  // ⭐ Auto close navbar on mobile
+  const closeNavbar = () => {
+    const navbar = document.getElementById("navbarContent");
+    if (navbar) {
+      const bsCollapse = new window.bootstrap.Collapse(navbar, { toggle: false });
+      bsCollapse.hide();
+    }
+  };
+
+  // Fetch categories
   useEffect(() => {
     axios
       .get("/products/categories")
@@ -22,7 +31,7 @@ function Navbar() {
       .catch((err) => console.log("Category fetch error:", err));
   }, []);
 
-  // Live search
+  // Live search update
   useEffect(() => {
     if (location.pathname === "/") {
       const timer = setTimeout(() => {
@@ -37,7 +46,7 @@ function Navbar() {
       <div className="container">
 
         {/* Brand */}
-        <Link className="navbar-brand fw-bold" to="/">
+        <Link className="navbar-brand fw-bold" to="/" onClick={closeNavbar}>
           glassykart🛍️
         </Link>
 
@@ -54,9 +63,8 @@ function Navbar() {
         {/* Collapsible area */}
         <div className="collapse navbar-collapse" id="navbarContent">
 
-          {/* Search + Category (full width on mobile) */}
+          {/* Search + Category */}
           <div className="d-flex flex-column flex-lg-row gap-2 mx-lg-auto mt-3 mt-lg-0">
-
             <input
               type="text"
               className="form-control"
@@ -80,15 +88,22 @@ function Navbar() {
           {/* Nav buttons */}
           <ul className="navbar-nav ms-lg-4 mt-3 mt-lg-0 d-flex align-items-lg-center gap-lg-3">
             <li className="nav-item">
-              <Link className="btn btn-outline-dark w-100" to="/">HOME</Link>
+              <Link className="btn btn-outline-dark w-100" to="/" onClick={closeNavbar}>
+                HOME
+              </Link>
             </li>
             <li className="nav-item">
-              <Link className="btn btn-outline-dark w-100" to="/cart">Cart</Link>
+              <Link className="btn btn-outline-dark w-100" to="/cart" onClick={closeNavbar}>
+                Cart
+              </Link>
             </li>
             <li className="nav-item">
-              <Link className="btn btn-outline-dark w-100" to="/about">About</Link>
+              <Link className="btn btn-outline-dark w-100" to="/about" onClick={closeNavbar}>
+                About
+              </Link>
             </li>
           </ul>
+
         </div>
       </div>
     </nav>

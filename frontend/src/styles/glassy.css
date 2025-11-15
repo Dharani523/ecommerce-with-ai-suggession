@@ -145,19 +145,85 @@ body {
   max-height: 480px;
   overflow-y: auto;
 }
-
-
-.carousel-item {
-  height: auto; 
+/* Product Card Compact Layout */
+.product-card {
+  border-radius: 16px;
+  background: rgba(255,255,255,0.35);
+  backdrop-filter: blur(10px);
+  transition: 0.25s ease;
 }
 
-.carousel-item img {
-  width: 100% ;
-  height: auto;       /* important */
-  object-fit: contain;
-  display: block;
-  background: linear-gradient(135deg, rgba(240,240,255,0.9),#8bccef);
+.product-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+}
+
+/* Product image zoom effect */
+.product-img {
+  transition: 0.3s ease;
+}
+
+.product-img:hover {
+  transform: scale(1.05);
 }
 
 
+/* 🔥 Fix Home Page Wide Spacing */
+.product-list {
+  max-width: 1500px;     /* Wider content area */
+  margin: 0 auto;        /* Center align */
+  padding: 0 12px;       /* Small padding for mobile */
+}
 
+@media (min-width: 1400px) {
+  .product-list {
+    max-width: 1650px;    /* Super wide on big screens */
+    padding: 0 20px;
+  }
+}
+
+/* Optional: Reduce horizontal gaps */
+.row.gx-3 {
+  --bs-gutter-x: 1rem; /* tighter spacing */
+}
+/* Footer links */
+.footer-link {
+  text-decoration: none;
+  color: #333;
+  font-weight: 500;
+  transition: 0.3s ease;
+}
+
+.footer-link:hover {
+  color: #0056b3;
+}
+
+/* Social icons */
+.social-icon {
+  font-size: 1.4rem;
+  color: #333;
+  transition: 0.3s ease;
+}
+
+.social-icon:hover {
+  color: #0056b3;
+  transform: translateY(-3px);
+}
+
+/* Footer glass effect */
+.glass-footer {
+  box-shadow: 0 -5px 20px rgba(0,0,0,0.15);
+  padding-top: 10px !important;
+  padding-bottom: 10px !important;
+}
+/* Reduce footer padding */
+
+/* Remove extra margin above footer */
+footer {
+  margin-top: 0 !important;
+}
+
+/* Remove body bottom spacing (Bootstrap sometimes adds it) */
+body {
+  padding-bottom: 0 !important;
+}

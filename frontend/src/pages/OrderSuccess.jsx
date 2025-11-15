@@ -18,15 +18,34 @@ function OrderSuccess() {
     console.log("ORDER RECEIVED:", order);
   }, []);
 
-  // 🚫 Disable back button after order is placed
+  // 🚫 Disable back button completely
   useEffect(() => {
     window.history.pushState(null, "", window.location.href);
-    window.onpopstate = function () {
-      window.history.go(1);
+    const blockBack = () => {
+      window.history.pushState(null, "", window.location.href);
+    };
+    window.addEventListener("popstate", blockBack);
+
+    return () => {
+      window.removeEventListener("popstate", blockBack);
     };
   }, []);
 
-  // ✅ Correct total (works for both amount & totalAmount)
+  // 🔁 Auto-redirect after 5 seconds
+ // 🚫 Disable Back Button
+useEffect(() => {
+  const goToCart = () => {
+    window.location.replace("/cart"); // opens cart page instead of going back
+  };
+
+  window.history.pushState(null, "", window.location.href);
+  window.addEventListener("popstate", goToCart);
+
+  return () => window.removeEventListener("popstate", goToCart);
+}, []);
+
+
+  // Calculate final total
   const finalTotal = order.totalAmount ?? order.amount ?? 0;
 
   return (
@@ -56,6 +75,8 @@ function OrderSuccess() {
         <button className="btn btn-glass mt-4" onClick={() => navigate("/")}>
           Continue Shopping
         </button>
+
+        
       </div>
     </div>
   );

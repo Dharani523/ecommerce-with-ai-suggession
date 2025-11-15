@@ -5,7 +5,7 @@ import AIAssistant from "../components/AIAssistant";
 
 function Cart() {
   const { cart, removeFromCart, updateQty, totalAmount } =
-  useContext(CartContext);
+    useContext(CartContext);
 
   const navigate = useNavigate();
 
@@ -16,8 +16,7 @@ function Cart() {
     <>
       <AIAssistant context={cart} />
 
-            <div className="container glass-card p-4 mt-5">
-
+      <div className="container glass-card p-4 mt-5">
         <h2 className="text-center text-glow mb-4">Your Shopping Cart</h2>
 
         <div className="row g-4">
@@ -26,7 +25,8 @@ function Cart() {
               <div className="card shadow-sm h-100">
                 <img
                   src={
-                    item.product.images?.[0]?.image || "/images/placeholder.png"
+                    item.product.images?.[0]?.image ||
+                    "/images/placeholder.png"
                   }
                   className="card-img-top"
                   alt={item.product.name}

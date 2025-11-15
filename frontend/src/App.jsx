@@ -11,6 +11,7 @@ import OrderSuccess from "./pages/OrderSuccess";
 import { useContext } from "react";
 import { CartContext } from "./context/CartContext";
 import AIAssistant from "./components/AIAssistant";
+import Footer from "./components/Footer";
 
 // import styles from "./App.css";
 
@@ -42,7 +43,9 @@ function App() {
 
     {/* ✅ AI must be OUTSIDE ROUTES, always visible */}
     <AIAssistant cart={cart} />
+    <Footer /> 
   </Router>
+  
 );
 
 }

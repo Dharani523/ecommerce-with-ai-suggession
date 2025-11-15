@@ -14,6 +14,9 @@ function ProductDetails() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
 
+  // ⭐ NEW — quantity state
+  const [qty, setQty] = useState(1);
+
   useEffect(() => {
     setLoading(true);
     axios
@@ -38,6 +41,7 @@ function ProductDetails() {
 
       <div className="container my-5">
         <div className="row g-4 align-items-center">
+
           {/* Product Images */}
           <div className="col-md-6 text-center">
             <div
@@ -94,21 +98,42 @@ function ProductDetails() {
               ${product.price.toFixed(2)}
             </h4>
 
+            {/* ⭐ NEW — Quantity Selector */}
+            <div className="d-flex align-items-center mb-4">
+              <button
+                className="btn btn-outline-secondary px-3"
+                onClick={() => qty > 1 && setQty(qty - 1)}
+              >
+                –
+              </button>
+
+              <span className="mx-3 fs-5 fw-bold">{qty}</span>
+
+              <button
+                className="btn btn-outline-secondary px-3"
+                onClick={() => setQty(qty + 1)}
+              >
+                +
+              </button>
+            </div>
+
+            {/* Buttons */}
             <div className="d-flex gap-3 mb-4 flex-wrap">
               <button
                 className="btn btn-warning px-4 py-2"
                 onClick={() => {
-                  addToCart(product);
+                  addToCart({ ...product, qty }); // ⭐ ADD quantity
                   alert("Product added to cart!");
                 }}
               >
                 Add to Cart
               </button>
+
               <button
                 className="btn btn-dark px-4 py-2"
                 onClick={() =>
                   navigate("/checkout", {
-                    state: { cart: [{ product, qty: 1 }] },
+                    state: { cart: [{ product, qty }] }, // ⭐ ADD quantity
                   })
                 }
               >
@@ -125,6 +150,7 @@ function ProductDetails() {
               </p>
             </div>
           </div>
+
         </div>
       </div>
     </>

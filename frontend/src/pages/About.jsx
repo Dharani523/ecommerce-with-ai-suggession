@@ -117,12 +117,6 @@ function About() {
           ))}
         </div>
       </section>
-
-      {/* Footer Section */}
-      <footer className="bg-dark text-white text-center py-4">
-        <p className="mb-1">© {new Date().getFullYear()} SmartShop. All rights reserved.</p>
-        <small>Designed with ❤️ by Dharanidharan</small>
-      </footer>
     </div>
   );
 }

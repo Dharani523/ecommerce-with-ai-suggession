@@ -1,12 +1,15 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import axios from "../axiosInstance";
+import { CartContext } from "../context/CartContext"; // ⭐ ADD THIS
 
 function Checkout() {
   const location = useLocation();
   const navigate = useNavigate();
   const cart = location.state?.cart || [];
   const [loading, setLoading] = useState(false);
+
+  const { clearCart } = useContext(CartContext); // ⭐ ADD THIS
 
   // Shipping fields
   const [name, setName] = useState("");
@@ -32,7 +35,6 @@ function Checkout() {
     0
   );
 
-  // Validate individual fields
   const validateField = (field, value) => {
     let message = "";
     if (field === "name") {
@@ -51,7 +53,6 @@ function Checkout() {
     return message === "";
   };
 
-  // Validate all before submission
   const validateAll = () => {
     const validName = validateField("name", name);
     const validPhone = validateField("phone", phone);
@@ -59,7 +60,7 @@ function Checkout() {
     return validName && validPhone && validAddress;
   };
 
-  // Place order handler
+  // ⭐⭐⭐ IMPORTANT: Clear cart after order success
   const placeOrder = async () => {
     if (!validateAll()) return;
 
@@ -74,6 +75,10 @@ function Checkout() {
       const res = await axios.post("/orders", orderData);
 
       if (res.data.success) {
+
+        clearCart();                 // ⭐ Clear cart (state)
+        localStorage.removeItem("cart");  // ⭐ Clear localStorage
+
         navigate("/order-success", { state: { orderData: res.data.order } });
       } else {
         alert("Failed to place order. " + (res.data.error || ""));
@@ -88,17 +93,14 @@ function Checkout() {
 
   return (
     <div className="container my-5">
-      <h2 className="mb-4 text-center text-light  hhh">Checkout</h2>
+      <h2 className="mb-4 text-center text-light hhh">Checkout</h2>
 
-      {/* Equal height wrapper */}
       <div className="row g-4 checkout-row">
-
-        {/* Shipping Form */}
+        {/* Left */}
         <div className="col-lg-6 d-flex">
           <div className="card p-4 shadow-sm glass-card w-100 h-100">
             <h5 className="mb-3">Shipping Details</h5>
 
-            {/* Name Field */}
             <div className="mb-3">
               <label className="form-label">Full Name</label>
               <input
@@ -109,12 +111,9 @@ function Checkout() {
                 onChange={(e) => setName(e.target.value)}
                 onBlur={() => validateField("name", name)}
               />
-              {errors.name && (
-                <div className="invalid-feedback">{errors.name}</div>
-              )}
+              {errors.name && <div className="invalid-feedback">{errors.name}</div>}
             </div>
 
-            {/* Phone Field */}
             <div className="mb-3">
               <label className="form-label">Phone</label>
               <input
@@ -125,12 +124,9 @@ function Checkout() {
                 onChange={(e) => setPhone(e.target.value)}
                 onBlur={() => validateField("phone", phone)}
               />
-              {errors.phone && (
-                <div className="invalid-feedback">{errors.phone}</div>
-              )}
+              {errors.phone && <div className="invalid-feedback">{errors.phone}</div>}
             </div>
 
-            {/* Address Field */}
             <div className="mb-3">
               <label className="form-label">Address</label>
               <textarea
@@ -141,14 +137,12 @@ function Checkout() {
                 onChange={(e) => setAddress(e.target.value)}
                 onBlur={() => validateField("address", address)}
               ></textarea>
-              {errors.address && (
-                <div className="invalid-feedback">{errors.address}</div>
-              )}
+              {errors.address && <div className="invalid-feedback">{errors.address}</div>}
             </div>
           </div>
         </div>
 
-        {/* Order Summary */}
+        {/* Right */}
         <div className="col-lg-6 d-flex">
           <div className="card p-4 shadow-sm glass-card w-100 h-100">
             <h5 className="mb-3">Order Summary</h5>
@@ -160,10 +154,7 @@ function Checkout() {
                   className="d-flex align-items-center mb-3 border-bottom pb-2"
                 >
                   <img
-                    src={
-                      item.product.images?.[0]?.image ||
-                      "/images/placeholder.png"
-                    }
+                    src={item.product.images?.[0]?.image || "/images/placeholder.png"}
                     alt={item.product.name}
                     style={{
                       width: "60px",
@@ -199,7 +190,6 @@ function Checkout() {
             </button>
           </div>
         </div>
-
       </div>
     </div>
   );
