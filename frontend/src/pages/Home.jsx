@@ -12,31 +12,34 @@ function Home() {
   const categoryQuery = queryParams.get("category") || "";
 
   const [products, setProducts] = useState([]);
+  const [loading, setLoading] = useState(true); // ⬅️ NEW
 
   useEffect(() => {
+    setLoading(true); // ⬅️ NEW (loading starts)
     axios
       .get("/products", {
         params: { search: searchQuery, category: categoryQuery },
       })
-      .then((res) => setProducts(res.data.products))
-      .catch((err) => console.log(err));
+      .then((res) => {
+        setProducts(res.data.products);
+      })
+      .catch((err) => console.log(err))
+      .finally(() => setLoading(false)); // ⬅️ NEW (loading ends)
   }, [searchQuery, categoryQuery]);
 
   const slides = [
     {
-      image:"/images/img3.png",
+      image: "/images/img3.png",
       title: "Discover New Gadgets",
       description: "Shop the latest and greatest tech trends.",
     },
     {
-      image:
-        "/images/img2.png",
+      image: "/images/img2.png",
       title: "Stylish Laptops",
       description: "Work smarter with our premium laptop collection.",
     },
     {
-      image:
-        "/images/img1.png",
+      image: "/images/img1.png",
       title: "Accessories You’ll Love",
       description: "Enhance your tech experience with style.",
     },
@@ -44,17 +47,18 @@ function Home() {
 
   return (
     <>
-      <AIAssistant
-        context={{ search: searchQuery, category: categoryQuery }}
-      />
+      <AIAssistant context={{ search: searchQuery, category: categoryQuery }} />
 
       <Carousel slides={slides} />
 
       <div className="container mt-5">
-        {/* <h2 className="text-center mb-4 fw-bold">🔥 Featured Products</h2> */}
         <div className="row g-4">
-          {products.length === 0 ? (
-            <p className="text-center">No products found.</p>
+
+          {/* ✅ Loading UI */}
+          {loading ? (
+            <p className="text-center fs-5">Loading products...</p>
+          ) : products.length === 0 ? (
+            <p className="text-center fs-5">No products found.</p>
           ) : (
             products.map((p) => (
               <div key={p._id} className="col-lg-4 col-md-6 col-sm-12">
