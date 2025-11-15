@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 
 const orderschema = new mongoose.Schema({
     cartItems: Array,
-    amount: Number,
+    totalAmount: Number,   // ← FIXED
     status: String,
     shippingAddress: {
         name: String,

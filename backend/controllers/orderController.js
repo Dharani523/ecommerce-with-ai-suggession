@@ -14,7 +14,7 @@ exports.createOrder = async (req, res) => {
 
     const order = await Ordermodel.create({
       cartItems,
-      amount: totalAmount,
+      totalAmount,           // ← FIXED
       status: "pending",
       shippingAddress,
       createdAt: new Date(),

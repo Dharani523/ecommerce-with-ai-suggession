@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 import confetti from "canvas-confetti";
 import { useNavigate, useLocation } from "react-router-dom";
-import  "../styles/ordersuccess.css";
+import "../styles/ordersuccess.css";
 
 function OrderSuccess() {
   const navigate = useNavigate();
@@ -15,7 +15,13 @@ function OrderSuccess() {
       spread: 80,
       origin: { y: 0.6 },
     });
+
+    console.log("ORDER RECEIVED:", order); // 🔍 Debug (you can remove later)
   }, []);
+
+  // ✅ FIXED: Total amount will always appear correctly
+  const finalTotal =
+    order.totalAmount ?? order.amount ?? 0;
 
   return (
     <div className="order-success-page">
@@ -25,8 +31,7 @@ function OrderSuccess() {
 
         <div className="mt-3 text-start order-summary">
           <h5 className="text-glow">Order Summary:</h5>
-         <ul className="list-unstyled order-success-summary">
-
+          <ul className="list-unstyled order-success-summary">
             <li>
               <strong>Name:</strong> {order.shippingAddress?.name || "N/A"}
             </li>
@@ -34,10 +39,11 @@ function OrderSuccess() {
               <strong>Phone:</strong> {order.shippingAddress?.phone || "N/A"}
             </li>
             <li>
-              <strong>Address:</strong> {order.shippingAddress?.address || "N/A"}
+              <strong>Address:</strong>{" "}
+              {order.shippingAddress?.address || "N/A"}
             </li>
             <li>
-              <strong>Total:</strong> ${order.totalAmount?.toFixed(2) || "0.00"}
+              <strong>Total:</strong> ${finalTotal.toFixed(2)}
             </li>
           </ul>
         </div>
