@@ -8,20 +8,26 @@ function OrderSuccess() {
   const location = useLocation();
   const order = location.state?.orderData || {};
 
+  // 🎊 Confetti animation
   useEffect(() => {
-    // 🎊 Trigger confetti animation
     confetti({
       particleCount: 150,
       spread: 80,
       origin: { y: 0.6 },
     });
-
-    console.log("ORDER RECEIVED:", order); // 🔍 Debug (you can remove later)
+    console.log("ORDER RECEIVED:", order);
   }, []);
 
-  // ✅ FIXED: Total amount will always appear correctly
-  const finalTotal =
-    order.totalAmount ?? order.amount ?? 0;
+  // 🚫 Disable back button after order is placed
+  useEffect(() => {
+    window.history.pushState(null, "", window.location.href);
+    window.onpopstate = function () {
+      window.history.go(1);
+    };
+  }, []);
+
+  // ✅ Correct total (works for both amount & totalAmount)
+  const finalTotal = order.totalAmount ?? order.amount ?? 0;
 
   return (
     <div className="order-success-page">
@@ -39,8 +45,7 @@ function OrderSuccess() {
               <strong>Phone:</strong> {order.shippingAddress?.phone || "N/A"}
             </li>
             <li>
-              <strong>Address:</strong>{" "}
-              {order.shippingAddress?.address || "N/A"}
+              <strong>Address:</strong> {order.shippingAddress?.address || "N/A"}
             </li>
             <li>
               <strong>Total:</strong> ${finalTotal.toFixed(2)}
